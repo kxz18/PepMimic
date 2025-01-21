@@ -1,0 +1,60 @@
+dataset:
+  train:
+    class: CoDesignDataset
+    mmap_dir: ./datasets/train_valid
+    specify_index: ./datasets/train_valid/train.txt
+    backbone_only: false
+    cluster: ./datasets/train_valid/train.cluster
+    use_covariance_matrix: true
+  valid:
+    class: CoDesignDataset
+    mmap_dir: ./datasets/train_valid
+    specify_index: ./datasets/train_valid/valid.txt
+    backbone_only: false
+    use_covariance_matrix: true
+
+dataloader:
+  shuffle: true
+  num_workers: 4
+  wrapper:
+    class: DynamicBatchWrapper
+    complexity: n**2
+    ubound_per_batch: 60000  # batch size ~32
+
+trainer:
+  class: LDMTrainer
+  criterion: Loss
+  config:
+    max_epoch: 100
+    save_topk: 10
+    val_freq: 10
+    save_dir: ./ckpts/LDM_codesign
+    patience: 10
+    metric_min_better: true
+
+    optimizer:
+      class: AdamW
+      lr: 5.0e-5
+
+    scheduler:
+      class: ReduceLROnPlateau
+      factor: 0.6
+      patience: 3
+      mode: min
+      frequency: val_epoch
+      min_lr: 5.0e-6
+
+model:
+  class: LDMPepDesign
+  autoencoder_ckpt: ""
+  autoencoder_no_randomness: true
+  hidden_size: 128
+  num_steps: 100
+  n_layers: 3
+  n_rbf: 32
+  cutoff: 3.0 # the coordinates are in standard space
+  diffusion_opt:
+    trans_seq_type: Diffusion
+    trans_pos_type: Diffusion
+
+load_ckpt: ""

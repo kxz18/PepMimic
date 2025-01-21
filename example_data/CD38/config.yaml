@@ -1,0 +1,11 @@
+dataset:
+  test:
+    class: MimicryDataset
+    ref_dir: ./example_data/CD38  # relative path rooted at the project folder
+    n_sample_per_cplx: 20        # number of generations for each reference complex
+    length_lb: 10                 # lower bound of peptide length (inclusive)
+    length_ub: 12                 # uppper bound of peptide length (inclusive)
+
+dataloader:
+  num_workers: 4
+  batch_size: 32                  # If the GPU is out of memory, please try to reduce the batch size

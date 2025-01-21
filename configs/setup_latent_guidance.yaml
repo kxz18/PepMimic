@@ -1,0 +1,12 @@
+dataset:
+  test:
+    class: CoDesignDataset
+    mmap_dir: ./datasets/train_valid
+    specify_index: ./datasets/train_valid/train.txt
+    backbone_only: false
+
+dataloader:
+  num_workers: 2
+  batch_size: 32
+
+backbone_only: false
