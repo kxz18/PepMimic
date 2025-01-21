@@ -9,24 +9,13 @@ conda env create -f env.yaml
 conda activate pepmimic
 ```
 
+## Checkpoints
 
-## Reproducing the Figures of In Silico Evaluations
-
-First download the raw structure data for these figures from [google drive](https://drive.google.com/file/d/1QVevyLjq9Z66RoS6l9XAFgx6lOELKRut/view?usp=sharing) and decompress them under `figures/`:
-
-```bash
-figures/
-├── codes
-├── data
-│   ├── test_metric
-│   └── traj
-└── draw.sh
-```
-
-Then run the following integrated script:
+The model weights can be downloaded at the [release page](https://github.com/kxz18/PepMimic/releases/download/v1.0/checkpoints.zip).
 
 ```bash
-bash figures/draw.sh
+wget https://github.com/kxz18/PepMimic/releases/download/v1.0/checkpoints.zip
+unzip checkpoints.zip
 ```
 
 ## Mimicking Given References
@@ -61,22 +50,3 @@ GPU=0 bash scripts/mimic.sh example_data/CD38 10
 ```
 
 The results will be saved under `example_data/CD38/final_output`.
-
-## Training
-
-First download the datasets from [google drive](https://drive.google.com/file/d/1AC6d6eG5T-31_vZUi_d416owW3jSQe32/view?usp=sharing) and decompress them:
-
-```bash
-datasets
-├── train_valid     # training and validation sets
-├── LNR             # test set
-└── ProtFrag        # augmentation data from protein monomers for pretraining
-```
-
-Then run the integrated scripts:
-
-```bash
-GPU=0 bash scripts/run_exp_pipe.sh
-```
-
-The resulting checkpoint will be saved at `./exps/PeptideMimicry/model.ckpt`.
