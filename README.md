@@ -1,5 +1,7 @@
 # Peptide Mimicry
 
+![cover](./assets/cover.png)
+
 ## Environment
 
 :warning: The codes are tested under cuda 11.7.
