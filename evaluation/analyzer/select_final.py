@@ -98,11 +98,12 @@ def main(args):
     else:
         qualified_pdbid = None
     def pdb_qualify(_id):
+        relax_finish = os.path.exists(get_pdb_path(args.root_dir, _id, '_openmm'))
         if qualified_pdbid is None:
-            return True
+            return relax_finish
         pdb_id = '_'.join(_id.split('_')[:-1])
         # pdb ID is allowed, and the relaxed file is ready
-        return (pdb_id in qualified_pdbid) and os.path.exists(get_pdb_path(args.root_dir, _id, '_openmm'))
+        return (pdb_id in qualified_pdbid) and relax_finish
 
     metrics, ranks = {}, {}
     for name in args.filter_name:
