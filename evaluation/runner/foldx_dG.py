@@ -5,6 +5,7 @@ import time
 import argparse
 
 import ray
+import torch
 
 from .base import Task, TaskScanner, NoCYSFilter
 
@@ -13,7 +14,7 @@ from evaluation.dG.openmm_relaxer import ForceFieldMinimizer
 from evaluation.dG.foldx_energy import foldx_minimize_energy, foldx_dg
 
 
-@ray.remote(num_gpus=1/8, num_cpus=1)
+# @ray.remote(num_gpus=1/8, num_cpus=1)
 def run_openmm_relax(task: Task):
     if not task.can_proceed():
         return task
@@ -22,7 +23,7 @@ def run_openmm_relax(task: Task):
 
     in_path = task.current_path
     out_path =  task.set_current_path_tag('openmm')
-    force_field = ForceFieldMinimizer()
+    force_field = ForceFieldMinimizer(platform='CUDA' if torch.cuda.is_available() else 'CPU')
     try:
         force_field(in_path, out_path)
         task.mark_proceeding()
@@ -67,8 +68,13 @@ def run_foldx_dg(task: Task):
 
 @ray.remote
 def pipeline_pyrosetta(task):
+    if torch.cuda.is_available():
+        run_openmm_relax_remote = ray.remote(num_gpus=1/8, num_cpus=1)(run_openmm_relax)
+    else:
+        run_openmm_relax_remote = ray.remote(num_cpus=1)(run_openmm_relax)
     funcs = [
-        run_openmm_relax,
+        # run_openmm_relax,
+        run_openmm_relax_remote,
         run_foldx_relax,
         run_foldx_dg
     ]

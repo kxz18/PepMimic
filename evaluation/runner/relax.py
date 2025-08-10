@@ -5,6 +5,7 @@ import time
 import argparse
 
 import ray
+import torch
 
 from .base import TaskScanner, NoCYSFilter
 
@@ -15,8 +16,12 @@ from .foldx_dG import run_openmm_relax
 
 @ray.remote
 def pipeline_pyrosetta(task):
+    if torch.cuda.is_available():
+        run_openmm_relax_remote = ray.remote(num_gpus=1/8, num_cpus=1)(run_openmm_relax)
+    else:
+        run_openmm_relax_remote = ray.remote(num_cpus=1)(run_openmm_relax)
     funcs = [
-        run_openmm_relax,
+        run_openmm_relax_remote,
     ]
     for fn in funcs:
         task = fn.remote(task)
