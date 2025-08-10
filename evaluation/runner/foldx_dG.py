@@ -14,7 +14,7 @@ from evaluation.dG.openmm_relaxer import ForceFieldMinimizer
 from evaluation.dG.foldx_energy import foldx_minimize_energy, foldx_dg
 
 
-# @ray.remote(num_gpus=1/8, num_cpus=1)
+@ray.remote(num_gpus=1/8 if torch.cuda.is_available() else 0, num_cpus=1)
 def run_openmm_relax(task: Task):
     if not task.can_proceed():
         return task
@@ -67,14 +67,9 @@ def run_foldx_dg(task: Task):
             
 
 @ray.remote
-def pipeline_pyrosetta(task):
-    if torch.cuda.is_available():
-        run_openmm_relax_remote = ray.remote(num_gpus=1/8, num_cpus=1)(run_openmm_relax)
-    else:
-        run_openmm_relax_remote = ray.remote(num_cpus=1)(run_openmm_relax)
+def pipeline_foldx(task):
     funcs = [
-        # run_openmm_relax,
-        run_openmm_relax_remote,
+        run_openmm_relax,
         run_foldx_relax,
         run_foldx_dg
     ]
@@ -125,7 +120,7 @@ def main(args):
     while True:
         tasks = scanner.scan()
         if (len(tasks) == 0) and (not args.server_mode): break
-        futures = [pipeline_pyrosetta.remote(t) for t in tasks]
+        futures = [pipeline_foldx.remote(t) for t in tasks]
         if len(futures) > 0:
             print(f'Submitted {len(futures)} tasks.')
         while len(futures) > 0:
