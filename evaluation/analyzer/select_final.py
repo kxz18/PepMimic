@@ -178,7 +178,7 @@ def main(args):
         if not done:
             id2rank = {}
             for _id in ids:
-                id2rank[_id] = min(ranks['pyrosetta_dG'].get(_id, 1e10), ranks['foldx_dG'].get(_id, 1e10))
+                id2rank[_id] = min(ranks.get('pyrosetta_dG', {}).get(_id, 1e10), ranks.get('foldx_dG', {}).get(_id, 1e10))
             best_id = min(ids, key=lambda _id: id2rank[_id])
             cand = id2candidates[best_id]
             cand.set_priority(id2rank[_id])
