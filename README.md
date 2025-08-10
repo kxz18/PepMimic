@@ -2,7 +2,9 @@
 
 ![cover](./assets/cover.png)
 
-## Environment
+## Running Locally
+
+### Environment
 
 :warning: The codes are tested under cuda 11.7.
 
@@ -22,7 +24,7 @@ evaluation/dG/foldx5/
 
 The suffix "20251231" denotes the last valid day of usage (2025/12/31) since foldx only provide 1-year license for academic usage and thus needs yearly renewal. After renewal, the path in `globals.py` also needs to be changed according to the new suffix.
 
-## Checkpoints
+### Checkpoints
 
 The model weights can be downloaded at the [release page](https://github.com/kxz18/PepMimic/releases/download/v1.0/checkpoints.zip).
 
@@ -31,7 +33,7 @@ wget https://github.com/kxz18/PepMimic/releases/download/v1.0/checkpoints.zip
 unzip checkpoints.zip
 ```
 
-## Mimicking Given References
+### Mimicking Given References
 
 Prepare an input folder with reference complexes in PDB format, an index file containing the chain ids of the target protein and the ligand, as well as a configuration indicating parameters like peptide length and number of generations. We have prepared an example folder under `example_data/CD38`:
 
@@ -74,3 +76,11 @@ GPU=0 bash scripts/mimic.sh example_data/CD38 10
 ```
 
 The results will be saved under `example_data/CD38/final_output`.
+
+
+## Running on Google Colab
+<a href="https://colab.research.google.com/drive/1ji_52YZjaqZnsGbvKD9hqjFOHa2Q1CV-?usp=sharing">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a> <br />
+
+We have also prepared the online version for users who prefer using Google Colab. However, we still recommend using the local version due to various constraints on Google Colab (e.g. Running time restriction).
