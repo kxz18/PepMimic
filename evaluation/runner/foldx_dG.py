@@ -83,6 +83,7 @@ def parse():
     parser.add_argument('--n_cpus', type=int, default=-1, help='Default using all cpus')
     parser.add_argument('--no_cys_filter', action='store_true')
     parser.add_argument('--result_dir', type=str, default='results', help='Result directory')
+    parser.add_argument('--server_mode', action='store_true', help='Keep scanning as a server')
     return parser.parse_args()
 
 
@@ -117,7 +118,7 @@ def main(args):
 
     while True:
         tasks = scanner.scan()
-        if len(tasks) == 0: break
+        if (len(tasks) == 0) and (not args.server_mode): break
         futures = [pipeline_pyrosetta.remote(t) for t in tasks]
         if len(futures) > 0:
             print(f'Submitted {len(futures)} tasks.')
