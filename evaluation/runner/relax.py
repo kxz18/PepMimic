@@ -11,7 +11,7 @@ from .base import TaskScanner, NoCYSFilter
 
 from utils.logger import print_log
 
-from .foldx_dG import run_openmm_relax
+from .foldx_dG import run_openmm_relax, sort_write
 
 
 @ray.remote
@@ -48,6 +48,10 @@ def main(args):
         args.root_dir,
         filters=[NoCYSFilter()] if args.no_cys_filter else [],
         specify_result_dir=args.result_dir)
+    
+    out_file = os.path.join(args.root_dir, args.result_dir, 'relax.txt')
+    if os.path.exists(out_file):
+        os.remove(out_file)
 
     while True:
         tasks = scanner.scan()
@@ -57,9 +61,12 @@ def main(args):
             print(f'Submitted {len(futures)} tasks.')
         while len(futures) > 0:
             done_ids, futures = ray.wait(futures, num_returns=1)
+            new_results = []
             for done_id in done_ids:
                 done_task = ray.get(done_id)
                 print_log(f'Remaining {len(futures)}. Finished {done_task.current_path}')
+                new_results.append((done_task.item_id, 0, done_task.pep_seq))
+            sort_write(out_file, new_results)
         time.sleep(1.0)
 
 
