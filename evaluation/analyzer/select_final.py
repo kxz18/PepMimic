@@ -101,7 +101,8 @@ def main(args):
         if qualified_pdbid is None:
             return True
         pdb_id = '_'.join(_id.split('_')[:-1])
-        return pdb_id in qualified_pdbid
+        # pdb ID is allowed, and the relaxed file is ready
+        return (pdb_id in qualified_pdbid) and os.path.exists(get_pdb_path(args.root_dir, _id, '_openmm'))
 
     metrics, ranks = {}, {}
     for name in args.filter_name:
