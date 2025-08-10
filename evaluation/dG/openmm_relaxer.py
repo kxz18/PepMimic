@@ -62,7 +62,7 @@ class ForceFieldMinimizer(object):
 
         # Set up the integrator and simulation
         integrator = openmm.LangevinIntegrator(0, 0.01, 0.0)
-        platform = openmm.Platform.getPlatformByName("CUDA")
+        platform = openmm.Platform.getPlatformByName(self.platform)
         simulation = openmm_app.Simulation(pdb.topology, system, integrator, platform)
         simulation.context.setPositions(pdb.positions)
 
