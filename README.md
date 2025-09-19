@@ -11,6 +11,10 @@
 ```bash
 conda env create -f env.yaml
 conda activate pepmimic
+
+# install pyrosetta
+pip install pyrosetta-installer
+python -c 'import pyrosetta_installer; pyrosetta_installer.install_pyrosetta()'
 ```
 
 :warning: You need to further manually setup FoldX5 suite by acquiring an [academic license](https://foldxsuite.crg.eu/academic-license-info). The suite should be downloaded and extracted under `evaluation/dG/foldx5`:
