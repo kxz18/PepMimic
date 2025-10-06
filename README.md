@@ -81,7 +81,7 @@ GPU=0 bash scripts/mimic.sh example_data/CD38 10
 
 The results will be saved under `example_data/CD38/final_output`.
 
-:warning: Note that for practical use, we recommend adjusting `n_sample_per_cplx` to at least 100,000 to let the model explore enough space before final selection. And also, from the experience in our experiments, the Rosetta and FoldX energy does not always rank the positive ones to the top, so it is recommended to synthesize at least 100 peptides for wetlab validation.
+:warning: Note that for practical use, we recommend adjusting `n_sample_per_cplx` to at least 100,000 to let the model explore enough space before final selection. And also, from the experience in our experiments, the Rosetta and FoldX energy does not always rank the positive ones to the top, so it is recommended to synthesize at least top 100 peptides for wetlab validation.
 
 
 ## Running on Google Colab
