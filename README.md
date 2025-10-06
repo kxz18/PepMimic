@@ -66,7 +66,7 @@ dataloader:
   batch_size: 32                  # If the GPU is out of memory, please try to reduce the batch size
 ```
 
-Each line of `index.txt` describes the filename (without `.pdb`), the target chains, the reference ligand chains, and custom annotations for a reference complex, separated by `\t`. For example, the line for `4cmh.pdb` looks like:
+Each line of `index.txt` describes the filename (without `.pdb`), the target chains, the reference ligand chains, and custom annotations for a reference complex, separated by `\t`. The custom annotations only work as reminders for yourself, since the program will not access this content. For example, the line for `4cmh.pdb` looks like:
 
 ```
 4cmh	A	B,C	HEAVY CHAIN OF SAR650984-FAB FRAGMENT,LIGHT CHAIN OF SAR650984-FAB FRAGMENT
