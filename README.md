@@ -81,7 +81,7 @@ GPU=0 bash scripts/mimic.sh example_data/CD38 10
 
 The results will be saved under `example_data/CD38/final_output`.
 
-:warning: Note that for practical use, we recommend adjusting `n_sample_per_cplx` to at least **100,000** to let the model explore enough space before final selection. And also, from the experience in our experiments, the Rosetta and FoldX energy does not always rank the positive ones to the top, so it is recommended to synthesize at least **top 100** peptides for wetlab validation.
+:warning: Note that for practical use, we recommend adjusting `n_sample_per_cplx` to at least **100,000** to let the model explore enough space before final selection. And also, from the experience in our experiments, the Rosetta and FoldX energy does not always rank the positive ones to the top, so it is recommended to synthesize **top 100 - 300** peptides for wetlab validation.
 
 
 ## Running on Google Colab
@@ -90,3 +90,18 @@ The results will be saved under `example_data/CD38/final_output`.
 </a> <br />
 
 We have also prepared the online version for users who prefer using Google Colab. However, we still recommend using the local version due to various constraints on Google Colab (e.g. Running time restriction).
+
+## Citing this Work
+
+If you find the work useful, please cite our paper as:
+
+```bibtex
+@article{kong2025peptide,
+  title={Peptide design through binding interface mimicry with PepMimic},
+  author={Kong, Xiangzhe and Jiao, Rui and Lin, Haowei and Guo, Ruihan and Huang, Wenbing and Ma, Wei-Ying and Wang, Zihua and Liu, Yang and Ma, Jianzhu},
+  journal={Nature Biomedical Engineering},
+  pages={1--16},
+  year={2025},
+  doi={10.1038/s41551-025-01507-4}
+}
+```
