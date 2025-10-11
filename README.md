@@ -91,6 +91,79 @@ The results will be saved under `example_data/CD38/final_output`.
 
 We have also prepared the online version for users who prefer using Google Colab. However, we still recommend using the local version due to various constraints on Google Colab (e.g. Running time restriction).
 
+
+## Training on Custom Datasets
+
+Here we provide the example using the [PepBench](https://zenodo.org/records/13373108) datasets to train our model, which is the same setting as in our paper. The benchmark includes two datasets:
+- **train_valid**: Training/validation sets of protein-peptide complexes between 4-25 residues extracted from PDB.
+- **ProtFrag**: Augmented datasets from pocket-peptide-like local contexts of monomer structures.
+
+### 0. Preliminary: structure of datasets
+
+Take the `ProtFrag` dataset as an example, we can see that each dataset has the following structure:
+
+```bash
+ProtFrag/
+├── all.txt     # an index file
+└── pdbs        # all protein-peptide complexes with *.pdb
+    ├── xxxxxx.pdb
+    ├── yyyyyy.pdb
+    ├── zzzzzz.pdb
+    ...
+```
+
+Each line of the index file `all.txt` records the information of each complex, including file name (without extension), target chain ids, peptide chain id, and whether the peptide has non-standard amino acid (optional), separated with `\t`:
+
+```bash
+pdb7wtk_0_11    R       L       0   # file name, target chain ids, peptide chain id, has non-standard amino acid, separated by \t. Our data processing does not read the last column, so it can be dropped when you are composing your own all.txt.
+```
+
+You can also provide custom splits by putting the information of complexes into different index files, just like the `train.txt` and the `valid.txt` in the `train_valid` dataset. Clustering files are also supported as the `train/valid.cluster` in the `train_valid` dataset, following the format of file name, cluster name, and cluster size separated by `\t`:
+
+```bash
+# contents of train_valid/train.cluster
+A_K_pdb4wjv     A_K_pdb4wjv     2
+D_J_pdb4wjv     A_K_pdb4wjv     2
+A_B_pdb5yay     A_B_pdb5yay     2
+B_D_pdb5ybv     A_B_pdb5yay     2
+B_C_pdb2drn     B_C_pdb2drn     4
+D_F_pdb2hwn     B_C_pdb2drn     4
+B_C_pdb2izx     B_C_pdb2drn     4
+A_E_pdb2hwn     B_C_pdb2drn     4
+...
+```
+
+During training, if the cluster file is provided, the dataset will resample complexes by cluster size, to make the frequency of each cluster equal with each other.
+
+### 1. Download the process the raw data
+
+```bash
+mkdir datasets  # all datasets will be put into this directory
+
+# download
+wget https://zenodo.org/records/13373108/files/train_valid.tar.gz?download=1 -O ./datasets/train_valid.tar.gz   # training/validation
+wget https://zenodo.org/records/13373108/files/ProtFrag.tar.gz?download=1 -O ./datasets/ProtFrag.tar.gz     # augmentation dataset
+
+# decompress
+tar zxvf ./datasets/train_valid.tar.gz -C ./datasets
+tar zxvf ./datasets/ProtFrag.tar.gz -C ./datasets
+```
+
+Next we need to process the dataset to the data structure (mmap) recognized by our training framework:
+
+```bash
+python -m scripts.data_process.process --index ./datasets/train_valid/all.txt  --out_dir ./datasets/train_valid/processed  # train/validation set
+python -m scripts.data_process.process --index ./datasets/ProtFrag/all.txt --out_dir ./datasets/ProtFrag/processed # augmentation dataset
+```
+
+For training and validation sets, we need to get the split index for mmap, which will result in `datasets/train_valid/processed/train_index.txt` and `datasets/train_valid/processed/valid_index.txt`:
+
+```bash
+python -m scripts.data_process.split --train_index datasets/train_valid/train.txt --valid_index datasets/train_valid/valid.txt --processed_dir datasets/train_valid/processed/
+```
+
+### 2. Training with scripts
+
 ## Citing this Work
 
 If you find the work useful, please cite our paper as:
