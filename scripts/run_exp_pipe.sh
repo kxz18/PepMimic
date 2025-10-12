@@ -5,7 +5,7 @@ echo "Locate the project folder at ${CODE_DIR}"
 cd ${CODE_DIR}
 
 ######### check number of args ##########
-HELP="Usage example: GPU=0 bash $0 <name> <AE config> <LDM pretrain config> <LDM config> <interface encoder config> <test config> [mode: e.g. 111111]"
+HELP="Usage example: GPU=0 bash $0 <name> <AE config> <LDM pretrain config> <LDM config> <interface encoder config> [mode: e.g. 1111]"
 echo ${HELP}
 
 # default
@@ -13,7 +13,6 @@ NAME=PeptideMimicry
 AECONFIG=${CODE_DIR}/configs/train_autoencoder.yaml
 PreLDMCONFIG=${CODE_DIR}/configs/pretrain_ldm.yaml
 LDMCONFIG=${CODE_DIR}/configs/train_ldm.yaml
-TEST_CONFIG=${CODE_DIR}/configs/test.yaml
 IFCONFIG=${CODE_DIR}/configs/train_ifencoder.yaml
 
 if [ -z $1 ]; then
@@ -41,24 +40,17 @@ if [ -z $5 ]; then
 else
     IFCONFIG=$5
 fi
-if [ -z $6 ]; then
-    echo "LDM test config using default: ${TEST_CONFIG}"
-else
-    TEST_CONFIG=$6
-fi
 
-if [ -z $7 ]; then
-    MODE=111111
+if [ -z $6 ]; then
+    MODE=1111
 else
-    MODE=$7
+    MODE=$6
 fi
-echo "Mode: $MODE, [train AE] / [pretrain LDM] / [train LDM] / [train Interface Encoder] / [Generate] / [Evalulation]"
+echo "Mode: $MODE, [train AE] / [pretrain LDM] / [train LDM] / [train Interface Encoder]"
 TRAIN_AE_FLAG=${MODE:0:1}
 PRETRAIN_LDM_FLAG=${MODE:1:1}
 TRAIN_LDM_FLAG=${MODE:2:1}
 TRAIN_IFENC_FLAG=${MODE:3:1}
-GENERATE_FLAG=${MODE:4:1}
-EVAL_FLAG=${MODE:5:1}
 
 AE_SAVE_DIR=./exps/$NAME/AE
 PRE_LDM_SAVE_DIR=./exps/$NAME/PreLDM
@@ -124,15 +116,4 @@ fi
 IFENC_CKPT=`cat ${IFENC_SAVE_DIR}/version_0/checkpoint/topk_map.txt | head -n 1 | awk -F " " '{print $2}'`
 echo "Final peptide mimicry checkpoint: ${IFENC_CKPT}" >> $OUTLOG
 cp $IFENC_CKPT ./exps/$NAME/model.ckpt
-
-########## generate ##########
-echo "Generate results Using LDM checkpoint: ${LDM_CKPT}" >> $OUTLOG
-if [ "$GENERATE_FLAG" = "1" ]; then
-    python generate.py --config $TEST_CONFIG --ckpt $LDM_CKPT --gpu ${GPU:0:1}
-fi
-
-########## cal metrics ##########
-if [ "$EVAL_FLAG" = "1" ]; then
-    echo "Evaluation:" >> $OUTLOG
-    python cal_metrics.py --results ${LDM_SAVE_DIR}/version_0/results/results.jsonl >> $OUTLOG
-fi
+echo "Copied final checkpoint to ./exps/$NAME/model.ckpt"
