@@ -164,6 +164,21 @@ python -m scripts.data_process.split --train_index datasets/train_valid/train.tx
 
 ### 2. Training with scripts
 
+We have provided a script pipelining each training stage in `./scripts/run_exp_pipe.sh`, which can be used as follows:
+
+```bash
+GPU=0 bash scripts/run_exp_pipe.sh \    # set gpu id with the environment variable GPU, in our experiment, we use a 24G GPU for training
+  demo_pepmimic \                       # <name>: name of your experiment. Results will be saved to ./exps/<name>
+  ./configs/train_autoencoder.yaml \    # <AE config>: Config for training the all-atom variational autoencoder
+  ./configs/pretrain_ldm.yaml \         # <LDM pretrain config>: Config for pretraining latent diffusion model on augmentation datasets
+  ./configs/train_ldm.yaml \            # <LDM config>: Config for finetuing the latent diffusion model on high-quality datasets
+  ./configs/train_ifencoder.yaml \      # <interface encoder config>: Config for training the latent interface encoder, which will be used as mimicry guidance
+  1111                                  # <mode>: four digits to indicate whether to train AE/pretrain LDM/finetune LDM/train interface encoder. Usually it should be 1111.
+```
+
+In the example above, we train the all-atom autoencoder on both `train_valid` and `ProtFrag`. Then we pretrain the latent diffusion model on the augmented dataset (ProtFrag), and finetune it on the high-quality dataset (train_valid). Finally, we train the latent interface encoder on both `train_valid` and `ProtFrag`. The finished checkpoint will be located at `./exps/demo_pepmimic/model.ckpt`.
+
+
 ## Citing this Work
 
 If you find the work useful, please cite our paper as:
