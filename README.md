@@ -6,10 +6,10 @@
 
 ### Environment
 
-:warning: The codes are tested under cuda 11.7.
+:warning: The codes are tested under cuda 11.7 with `env_cu117.yaml` and cuda 12.4 with `env_cu124.yaml`.
 
 ```bash
-conda env create -f env.yaml
+conda env create -f env_cu117.yaml  # use env_cu124.yaml if for CUDA 12.4 
 conda activate pepmimic
 
 # install pyrosetta
