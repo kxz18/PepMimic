@@ -1,0 +1,34 @@
+name: pepmimic
+channels:
+  - pytorch
+  - nvidia
+  - bioconda
+  - salilab
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch::pytorch=2.5.1
+  - pytorch::pytorch-cuda=12.4
+  - salilab::dssp
+  - anaconda::libboost=1.73.0
+  - mmseqs2
+  - pdbfixer=1.9
+  - openmm=8.0.0
+  - scikit-learn
+  - pip
+  - pip:
+    - biopython==1.80
+    - rdkit-pypi==2022.3.5
+    - torch-scatter==2.1.2 # if not work, manually use pip install --no-cache-dir torch-scatter to build from source
+    - sympy
+    - easydict
+    - scipy
+    - freesasa
+    - tensorboard
+    - pyyaml
+    - tqdm
+    - ray
+    - munkres
+    - matplotlib==3.8.2
+    - seaborn==0.12.0
