@@ -1,0 +1,38 @@
+name: pepmimic
+channels:
+  - pytorch
+  - nvidia
+  - bioconda
+  - pyg
+  - salilab
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pytorch::pytorch=1.13.1
+  - pytorch::pytorch-cuda=11.7
+  - nvidia::cudatoolkit=11.7.0
+  - mkl=2023.1.0
+  - pyg::pytorch-scatter
+  - salilab::dssp
+  - anaconda::libboost=1.73.0
+  - mmseqs2
+  - pdbfixer=1.9
+  - openmm=8.0.0
+  # - pyrosetta=2023.49+release.9891f2c=py39_0
+  - scikit-learn
+  - pip
+  - pip:
+    - biopython==1.80
+    - rdkit-pypi==2022.3.5
+    - sympy
+    - easydict
+    - scipy
+    - freesasa
+    - tensorboard
+    - pyyaml
+    - tqdm
+    - ray
+    - munkres
+    - matplotlib==3.8.2
+    - seaborn==0.12.0
