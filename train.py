@@ -34,7 +34,7 @@ def parse():
 
 
 def load_ckpt(model, ckpt):
-    trained_model = torch.load(ckpt, map_location='cpu')
+    trained_model = torch.load(ckpt, map_location='cpu', weights_only=False)
     model.load_state_dict(trained_model.state_dict())
     return model
 

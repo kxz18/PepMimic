@@ -36,7 +36,7 @@ class LDMPepDesign(nn.Module):
         self.autoencoder_no_randomness = autoencoder_no_randomness
         self.latent_idx = VOCAB.symbol_to_idx(VOCAB.LAT)
 
-        self.autoencoder: AutoEncoder = torch.load(autoencoder_ckpt, map_location='cpu')
+        self.autoencoder: AutoEncoder = torch.load(autoencoder_ckpt, map_location='cpu', weights_only=False)
         for param in self.autoencoder.parameters():
             param.requires_grad = False
         self.autoencoder.eval()

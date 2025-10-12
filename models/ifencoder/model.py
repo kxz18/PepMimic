@@ -76,7 +76,7 @@ class IFEncoder(nn.Module):
         self.subgraph_sample_ub = subgraph_sample_ub
         self.neg_thresh = neg_thresh
         
-        self.ldm: LDMPepDesign = torch.load(ldm_ckpt, map_location='cpu')
+        self.ldm: LDMPepDesign = torch.load(ldm_ckpt, map_location='cpu', weights_only=False)
         for param in self.ldm.parameters():
             param.requires_grad = False
         self.ldm.eval()

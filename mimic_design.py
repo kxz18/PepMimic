@@ -161,7 +161,7 @@ def main(args, opt_args):
     b_ckpt = args.ckpt if args.ckpt.endswith('.ckpt') else get_best_ckpt(args.ckpt)
     ckpt_dir = os.path.split(os.path.split(b_ckpt)[0])[0]
     print(f'Using checkpoint {b_ckpt}')
-    model = torch.load(b_ckpt, map_location='cpu')
+    model = torch.load(b_ckpt, map_location='cpu', weights_only=False)
     device = torch.device('cpu' if args.gpu == -1 else f'cuda:{args.gpu}')
     model.to(device)
     model.eval()
