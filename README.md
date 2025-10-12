@@ -2,6 +2,20 @@
 
 ![cover](./assets/cover.png)
 
+## :mag: Quick Links
+
+- [Running Locally](#running-locally)
+  - [Environment](#environment)
+  - [Checkpoints](#checkpoints)
+  - [Mimicking Given References](#mimicking-given-references)
+- [Running on Google Colab](#running-on-google-colab)
+- [Training on Custom Datasets](#training-on-custom-datasets)
+  - [Preliminary: Structure of Datasets](#preliminary-structure-of-datasets)
+  - [Download and Process the Raw Data](#download-and-process-the-raw-data)
+  - [Training with Specified Configurations](#training-with-specified-configurations)
+- [Contact](#contact)
+- [Citing this Work](#citing-this-work)
+
 ## Running Locally
 
 ### Environment
@@ -98,7 +112,7 @@ Here we provide the example using the [PepBench](https://zenodo.org/records/1337
 - **train_valid**: Training/validation sets of protein-peptide complexes between 4-25 residues extracted from PDB.
 - **ProtFrag**: Augmented datasets from pocket-peptide-like local contexts of monomer structures.
 
-### 0. Preliminary: structure of datasets
+### Preliminary: Structure of Datasets
 
 Take the `ProtFrag` dataset as an example, we can see that each dataset has the following structure:
 
@@ -135,7 +149,7 @@ A_E_pdb2hwn     B_C_pdb2drn     4
 
 During training, if the cluster file is provided, the dataset will resample complexes by cluster size, to make the frequency of each cluster equal with each other.
 
-### 1. Download the process the raw data
+###  Download and Process the Raw Data
 
 ```bash
 mkdir datasets  # all datasets will be put into this directory
@@ -162,7 +176,7 @@ For training and validation sets, we need to get the split index for mmap, which
 python -m scripts.data_process.split --train_index datasets/train_valid/train.txt --valid_index datasets/train_valid/valid.txt --processed_dir datasets/train_valid/processed/
 ```
 
-### 2. Training with scripts
+### Training with Specified Configurations
 
 We have provided a script pipelining each training stage in `./scripts/run_exp_pipe.sh`, which can be used as follows:
 
@@ -177,6 +191,13 @@ GPU=0 bash scripts/run_exp_pipe.sh \    # set gpu id with the environment variab
 ```
 
 In the example above, we train the all-atom autoencoder on both `train_valid` and `ProtFrag`. Then we pretrain the latent diffusion model on the augmented dataset (ProtFrag), and finetune it on the high-quality dataset (train_valid). Finally, we train the latent interface encoder on both `train_valid` and `ProtFrag`. The finished checkpoint will be located at `./exps/demo_pepmimic/model.ckpt`.
+
+
+## :bulb: Contact
+
+Thank you for your interest in our work!
+
+Please feel free to ask about any questions about the algorithms, codes, as well as problems encountered in running them so that we can make it clearer and better. You can either create an issue in the github repo or contact us at jackie_kxz@outlook.com.
 
 
 ## Citing this Work
