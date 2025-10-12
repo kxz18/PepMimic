@@ -1,8 +1,8 @@
 dataset:
   test:
     class: CoDesignDataset
-    mmap_dir: ./datasets/LNR
-    specify_index: ./datasets/LNR/test.txt
+    mmap_dir: ./datasets/LNR/processed
+    specify_index: ./datasets/LNR/processed/test.txt
     backbone_only: false
     use_covariance_matrix: true
 

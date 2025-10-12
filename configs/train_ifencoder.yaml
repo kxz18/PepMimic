@@ -1,19 +1,19 @@
 dataset:
   train:
     - class: CoDesignDataset
-      mmap_dir: ./datasets/train_valid
-      specify_index: ./datasets/train_valid/train.txt
+      mmap_dir: ./datasets/train_valid/processed
+      specify_index: ./datasets/train_valid/processed/train_index.txt
       backbone_only: false
       cluster: ./datasets/train_valid/train.cluster
       use_covariance_matrix: true
     - class: CoDesignDataset
-      mmap_dir: ./datasets/ProtFrag
+      mmap_dir: ./datasets/ProtFrag/processed
       backbone_only: false
       use_covariance_matrix: true
   valid:
     class: CoDesignDataset
-    mmap_dir: ./datasets/train_valid
-    specify_index: ./datasets/train_valid/valid.txt
+    mmap_dir: ./datasets/train_valid/processed
+    specify_index: ./datasets/train_valid/processed/valid_index.txt
     backbone_only: false
     use_covariance_matrix: true
 
