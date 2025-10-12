@@ -2,6 +2,10 @@
 
 ![cover](./assets/cover.png)
 
+## :smiley_cat: Introduction
+
+This is the official repository of our paper [Peptide design through binding interface mimicry with PepMimic](https://www.nature.com/articles/s41551-025-01507-4). Our proposed PepMimic is a deep-learning framework for generating short peptides that mimic the binding interface of known protein binders (e.g. natural receptors,  antibodies, nanobodies), enabling high-affinity target binding. For targets with no existing binders, our framework can also rely on the *in silico* pipeline which first generates protein binders with RFDiffusion and the uses PepMimic to mimic the interface (e.g. TROP2) to generate high-affinity peptides. We validate our method across multiple drug targets (PD-L1, CD38, HER2, BCMA, CD4, TROP2) and demonstrate both *in vitro* binding affinity and *in vivo* efficacy in tumor models. Thanks for your interest in our work!
+
 ## :mag: Quick Links
 
 - [Running Locally](#running-locally)
