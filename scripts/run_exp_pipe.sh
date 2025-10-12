@@ -75,45 +75,51 @@ elif [[ -e $IFENC_SAVE_DIR ]] && [ "$TRAIN_IFENC_FLAG" = "1" ]; then
 fi
 
 ########## train autoencoder ##########
-echo "Training Autoencoder with config $AECONFIG:" > $OUTLOG
-cat $AECONFIG >> $OUTLOG
+echo "Training Autoencoder with config $AECONFIG:" | tee $OUTLOG
+cat $AECONFIG | tee -a $OUTLOG
 if [ "$TRAIN_AE_FLAG" = "1" ]; then
     bash scripts/train.sh $AECONFIG --trainer.config.save_dir=$AE_SAVE_DIR
 fi
+echo "" | tee -a $OUTLOG
 
 ########## pretrain ldm ##########
-echo "Pretraining LDM with config $PreLDMCONFIG:" >> $OUTLOG
-cat $PreLDMCONFIG >> $OUTLOG
+echo "Pretraining LDM with config $PreLDMCONFIG:" | tee -a $OUTLOG
+cat $PreLDMCONFIG | tee -a $OUTLOG
 AE_CKPT=`cat ${AE_SAVE_DIR}/version_0/checkpoint/topk_map.txt | head -n 1 | awk -F " " '{print $2}'`
-echo "Using Autoencoder checkpoint: ${AE_CKPT}" >> $OUTLOG
+echo "Using Autoencoder checkpoint: ${AE_CKPT}" | tee -a $OUTLOG
 if [ "$PRETRAIN_LDM_FLAG" = "1" ]; then
     bash scripts/train.sh $PreLDMCONFIG --trainer.config.save_dir=$PRE_LDM_SAVE_DIR --model.autoencoder_ckpt=$AE_CKPT
 fi
+echo "" | tee -a $OUTLOG
 
 ########## train ldm ##########
-echo "Training LDM with config $LDMCONFIG:" >> $OUTLOG
-cat $LDMCONFIG >> $OUTLOG
+echo "Training LDM with config $LDMCONFIG:" | tee -a $OUTLOG
+cat $LDMCONFIG | tee -a $OUTLOG
 PRELDM_CKPT=`cat ${PRE_LDM_SAVE_DIR}/version_0/checkpoint/topk_map.txt | head -n 1 | awk -F " " '{print $2}'`
-echo "Using pretrained checkpoint: ${PRELDM_CKPT}" >> $OUTLOG
+echo "Using pretrained checkpoint: ${PRELDM_CKPT}" | tee -a $OUTLOG
 if [ "$TRAIN_LDM_FLAG" = "1" ]; then
     bash scripts/train.sh $LDMCONFIG --trainer.config.save_dir=$LDM_SAVE_DIR --model.autoencoder_ckpt=$AE_CKPT --load_ckpt=$PRELDM_CKPT
 fi
+echo "" | tee -a $OUTLOG
 
 ########## get latent distance ##########
 LDM_CKPT=`cat ${LDM_SAVE_DIR}/version_0/checkpoint/topk_map.txt | head -n 1 | awk -F " " '{print $2}'`
-echo "Get distances in latent space" >> $OUTLOG
+echo "Get distances in latent space" | tee -a $OUTLOG
 python setup_latent_guidance.py --config configs/setup_latent_guidance.yaml --ckpt ${LDM_CKPT} --gpu ${GPU:0:1} >> $OUTLOG
+echo "" | tee -a $OUTLOG
 
 
 ########## train interface encoder ##########
-echo "Training Interface Encoder with config ${IFCONFIG}:" >> $OUTLOG
-cat $IFCONFIG >> $OUTLOG
-echo "Using LDM checkpoint for training interface encoder: ${LDM_CKPT}" >> $OUTLOG
+echo "Training Interface Encoder with config ${IFCONFIG}:" | tee -a $OUTLOG
+cat $IFCONFIG | tee -a $OUTLOG
+echo "Using LDM checkpoint for training interface encoder: ${LDM_CKPT}" | tee -a $OUTLOG
 if [ "$TRAIN_IFENC_FLAG" = "1" ]; then
     bash scripts/train.sh $IFCONFIG --trainer.config.save_dir=$IFENC_SAVE_DIR --model.ldm_ckpt=$LDM_CKPT >> $OUTLOG
 fi
+echo "" | tee -a $OUTLOG
+
 # get final checkpoint
 IFENC_CKPT=`cat ${IFENC_SAVE_DIR}/version_0/checkpoint/topk_map.txt | head -n 1 | awk -F " " '{print $2}'`
-echo "Final peptide mimicry checkpoint: ${IFENC_CKPT}" >> $OUTLOG
+echo "Final peptide mimicry checkpoint: ${IFENC_CKPT}" | tee -a $OUTLOG
 cp $IFENC_CKPT ./exps/$NAME/model.ckpt
-echo "Copied final checkpoint to ./exps/$NAME/model.ckpt"
+echo "Copied final checkpoint to ./exps/$NAME/model.ckpt" | tee -a $OUTLOG
