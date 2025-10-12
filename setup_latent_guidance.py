@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 import torch
 
-from generate import get_best_ckpt, to_device
+from mimic_design import get_best_ckpt, to_device
 from data import create_dataloader, create_dataset
 
 
