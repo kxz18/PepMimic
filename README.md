@@ -77,7 +77,7 @@ dataset:
     ref_dir: ./example_data/CD38    # The directory for all reference complexes, which should be a relative path rooted at the project folder, or a absolute path
     n_sample_per_cplx: 20           # The number of generations for each reference complex. This is just a toy example for a quick tour. For practical usage, we recommend generating a total of above 100,000 candidates before ranking to select the top-scoring one for wetlab tests. For example, here we have two reference complexes, thus we should set n_sample_per_cplx to at least 50,000, so that the total generations will be above 100,000.
     length_lb: 10                 # lower bound of peptide length (inclusive)
-    length_ub: 12                 # uppper bound of peptide length (inclusive)
+    length_ub: 12                 # uppper bound of peptide length (inclusive, should <= 25 since the model is trained on peptides below 25 residues)
 
 dataloader:
   num_workers: 4                  # Number of CPUs for data processing. Usually 4 is enough.
