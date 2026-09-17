@@ -12,6 +12,7 @@ This is the official repository of our paper [Peptide design through binding int
   - [Environment](#environment)
   - [Checkpoints](#checkpoints)
   - [Mimicking Given References](#mimicking-given-references)
+- [Running on ProteinIQ](#running-on-proteiniq)
 - [Running on Google Colab](#running-on-google-colab)
 - [Training on Custom Datasets](#training-on-custom-datasets)
   - [Preliminary: Structure of Datasets](#preliminary-structure-of-datasets)
@@ -100,6 +101,10 @@ GPU=0 bash scripts/mimic.sh example_data/CD38 10
 The results will be saved under `example_data/CD38/final_output`.
 
 :warning: Note that for practical use, we recommend adjusting `n_sample_per_cplx` to at least **100,000** to let the model explore enough space before final selection. And also, from the experience in our experiments, the Rosetta and FoldX energy does not always rank the positive ones to the top, so it is recommended to synthesize **top 100 - 300** peptides for wetlab validation.
+
+## Running on ProteinIQ
+
+The algorithm is now available on the [ProteinIQ](https://proteiniq.io/app/pep-mimic) platform and can be run online without the need for local installation.
 
 
 ## Running on Google Colab
